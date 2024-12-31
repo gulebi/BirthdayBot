@@ -7,9 +7,18 @@ const command: SlashCommand = {
     execute: async (interaction) => {
         const list = await birthdayList();
 
+        const sortedDates = list.sort((a, b) => {
+            const [dayA, monthA] = a.date.split(".").map(Number);
+            const [dayB, monthB] = b.date.split(".").map(Number);
+
+            return monthA - monthB || dayA - dayB;
+        });
+
         await interaction.reply({
             content: `List: ${
-                list.length === 0 ? `\nEmpty!` : list.map((el) => `\nDate: ${el.date} | User: <@${el.userID}>`)
+                sortedDates.length === 0
+                    ? "\n" + "Empty!"
+                    : "\n" + sortedDates.map((el) => `Date: ${el.date} | User: <@${el.userID}>`).join("\n")
             }`,
             ephemeral: true,
         });
