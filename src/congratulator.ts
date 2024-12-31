@@ -19,13 +19,19 @@ async function check() {
         }
     }
 
-    const dateObjects = list.map((obj) => ({
-        ...obj,
-        date: dayjs(`${obj.date}.${new Date().getFullYear()}`, "DD.MM.YYYY"),
-    }));
+    const dateObjects = list.map((obj) => {
+        let date = dayjs(`${obj.date}.${new Date().getFullYear()}`, "DD.MM.YYYY");
+
+        if (date.isBefore(currentDate)) date = date.add(1, "year");
+
+        return {
+            ...obj,
+            date,
+        };
+    });
 
     const nearestNextDate = dateObjects.reduce((a, b) => {
-        return b.date.isAfter(currentDate) && b.date.diff(currentDate) < a.date.diff(currentDate) ? b : a;
+        return b.date.diff(currentDate) < a.date.diff(currentDate) ? b : a;
     });
 
     const user = await client.users.fetch(nearestNextDate.userID);
