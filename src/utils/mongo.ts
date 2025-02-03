@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 import getEnvVar from "./env";
 import { BirthdayModel } from "./Models";
-import { IBirthday } from "../types";
+import { Birthday } from "../types";
 
 export async function mongoConnect() {
     await mongoose.connect(getEnvVar("MONGODB_URI")).then(
@@ -10,7 +10,7 @@ export async function mongoConnect() {
     );
 }
 
-export async function birthdayAdd(userID: string, date: string): Promise<IBirthday> {
+export async function birthdayAdd(userID: string, date: string): Promise<Birthday> {
     const added = await BirthdayModel.findOneAndUpdate(
         { userID },
         { userID, date, $inc: { ver: 1 } },
@@ -21,14 +21,14 @@ export async function birthdayAdd(userID: string, date: string): Promise<IBirthd
     return added;
 }
 
-export async function birthdayRemove(userID: string): Promise<IBirthday | null> {
+export async function birthdayRemove(userID: string): Promise<Birthday | null> {
     const removed = await BirthdayModel.findOneAndDelete({ userID });
     console.log(removed);
 
     return removed;
 }
 
-export async function birthdayList(): Promise<IBirthday[]> {
+export async function birthdayList(): Promise<Birthday[]> {
     const list = await BirthdayModel.find({}).lean();
     return list;
 }

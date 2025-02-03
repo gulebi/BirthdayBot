@@ -7,7 +7,8 @@ import cron from "node-cron";
 import { ActivityType, Snowflake, TextChannel } from "discord.js";
 import { client } from ".";
 import { birthdayList } from "./utils/mongo";
-import { IBirthday } from "./types";
+import { Birthday } from "./types";
+import getEnvVar from "./utils/env";
 
 async function check() {
     const currentDate = dayjs();
@@ -41,8 +42,8 @@ async function check() {
     });
 }
 
-function send(birthday: IBirthday) {
-    const channelID: Snowflake = "792258704946102283";
+function send(birthday: Birthday) {
+    const channelID: Snowflake = getEnvVar("CHANNEL_ID");
 
     const channel = client.channels.cache.get(channelID);
 

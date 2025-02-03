@@ -7,7 +7,7 @@ export interface SlashCommand {
     cooldown?: number | 1000;
 }
 
-export interface IBirthday {
+export interface Birthday {
     userID: string;
     date: string;
     ver: number;

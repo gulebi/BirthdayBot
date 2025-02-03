@@ -1,7 +1,7 @@
 import { Schema } from "mongoose";
-import { IBirthday } from "../types";
+import { Birthday } from "../types";
 
-const BirthdaySchema = new Schema<IBirthday>({
+const BirthdaySchema = new Schema<Birthday>({
     userID: String,
     date: String,
     ver: Number,
