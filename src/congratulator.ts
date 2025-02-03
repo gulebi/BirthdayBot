@@ -4,19 +4,19 @@ import relativeTime from "dayjs/plugin/relativeTime";
 dayjs.extend(advancedFormat);
 dayjs.extend(relativeTime);
 import cron from "node-cron";
-import { ActivityType, Snowflake, TextChannel } from "discord.js";
-import { client } from ".";
+import { ActivityType, Snowflake } from "discord.js";
+import { client } from "./index";
 import { birthdayList } from "./utils/mongo";
 import { Birthday } from "./types";
 import getEnvVar from "./utils/env";
 
-async function check() {
+async function checkOnBirthday() {
     const currentDate = dayjs();
 
     const list = await birthdayList();
     for (const el of list) {
         if (el.date === currentDate.format("DD.MM")) {
-            send(el);
+            await sendCongratulation(el);
         }
     }
 
@@ -42,20 +42,21 @@ async function check() {
     });
 }
 
-function send(birthday: Birthday) {
+async function sendCongratulation(birthday: Birthday) {
     const channelID: Snowflake = getEnvVar("CHANNEL_ID");
 
     const channel = client.channels.cache.get(channelID);
 
     if (channel?.isTextBased()) {
-        channel?.send(
+        const message = await channel?.send(
             `Хей, @everyone! Сегодня, день рождения <@${birthday.userID}>! 🎂 \nНе забудьте поздравить именинника!`
         );
+        await message.react("🎉");
     }
 }
 
 export async function setup() {
-    cron.schedule("0 6 * * *", check);
+    cron.schedule("0 6 * * *", checkOnBirthday);
     console.log("Congratulator is launched!");
-    await check();
+    await checkOnBirthday();
 }

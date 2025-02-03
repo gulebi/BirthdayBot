@@ -4,7 +4,9 @@ import getEnvVar from "./utils/env";
 import { mongoConnect } from "./utils/mongo";
 import { setup } from "./congratulator";
 
-export const client = new Client({ intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages] });
+export const client = new Client({
+    intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages],
+});
 
 client.once(Events.ClientReady, async (c) => {
     await cmdLoader();
