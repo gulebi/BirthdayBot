@@ -56,7 +56,10 @@ async function sendCongratulation(birthday: Birthday) {
 }
 
 export async function setup() {
-    cron.schedule("0 6 * * *", checkOnBirthday);
+    cron.schedule("0 6 * * *", checkOnBirthday, {
+        scheduled: true,
+        timezone: "Asia/Atyrau",
+        runOnInit: true,
+    });
     console.log("Congratulator is launched!");
-    await checkOnBirthday();
 }
