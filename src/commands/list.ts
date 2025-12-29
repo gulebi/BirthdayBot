@@ -1,6 +1,6 @@
 import { MessageFlags, SlashCommandBuilder } from "discord.js";
 import { SlashCommand } from "../types";
-import { birthdayList } from "../mongo";
+import { birthdayList } from "../database/mongo";
 
 const command: SlashCommand = {
     data: new SlashCommandBuilder().setName("list").setDescription("Show list of birthdays"),

@@ -1,5 +1,5 @@
 import { Schema } from "mongoose";
-import { Birthday, Settings } from "../types";
+import { Birthday, Settings } from "../../types";
 
 const BirthdaySchema = new Schema<Birthday>({
     guildID: String,

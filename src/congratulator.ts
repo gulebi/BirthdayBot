@@ -5,7 +5,7 @@ dayjs.extend(advancedFormat);
 dayjs.extend(relativeTime);
 import cron from "node-cron";
 import { client } from "./index";
-import { birthdayList, settingsGet } from "./mongo";
+import { birthdayList, settingsGet } from "./database/mongo";
 import { Birthday } from "./types";
 import getEnvVar from "./utils/env";
 

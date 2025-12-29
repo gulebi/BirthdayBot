@@ -3,7 +3,7 @@ import customParseFormat from "dayjs/plugin/customParseFormat";
 dayjs.extend(customParseFormat);
 import { SlashCommandBuilder, PermissionsBitField, MessageFlags } from "discord.js";
 import { SlashCommand } from "../types";
-import { birthdayAdd } from "../mongo";
+import { birthdayAdd } from "../database/mongo";
 
 const command: SlashCommand = {
     data: new SlashCommandBuilder()

@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import getEnvVar from "../utils/env";
+import getEnvVar from "../../utils/env";
 
 export async function mongoConnect() {
     await mongoose.connect(getEnvVar("MONGODB_URI")).then(

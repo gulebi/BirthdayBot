@@ -1,4 +1,4 @@
-import { Settings } from "../../types";
+import { Settings } from "../../../types";
 import { SettingsModel } from "../Models";
 
 export async function settingsGet(guildID: string): Promise<Settings | null> {

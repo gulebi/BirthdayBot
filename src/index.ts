@@ -1,7 +1,7 @@
 import { Client, Events, GatewayIntentBits } from "discord.js";
 import { cmdLoader, cmdTrigger } from "./cmdHandler";
 import getEnvVar from "./utils/env";
-import { mongoConnect } from "./mongo";
+import { mongoConnect } from "./database/mongo";
 import { setupCongratulator } from "./congratulator";
 
 export const client = new Client({

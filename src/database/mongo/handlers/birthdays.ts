@@ -1,4 +1,4 @@
-import { Birthday } from "../../types";
+import { Birthday } from "../../../types";
 import { BirthdayModel } from "../Models";
 
 export async function birthdayAdd(guildID: string, userID: string, date: string, addedBy: string): Promise<Birthday> {
