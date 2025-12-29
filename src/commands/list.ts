@@ -1,11 +1,12 @@
-import { SlashCommandBuilder } from "discord.js";
+import { MessageFlags, SlashCommandBuilder } from "discord.js";
 import { SlashCommand } from "../types";
-import { birthdayList } from "../utils/mongo";
+import { birthdayList } from "../mongo";
 
 const command: SlashCommand = {
     data: new SlashCommandBuilder().setName("list").setDescription("Show list of birthdays"),
     execute: async (interaction) => {
-        const list = await birthdayList();
+        const guildID = interaction.guild.id;
+        const list = await birthdayList(guildID);
 
         const sortedDates = list.sort((a, b) => {
             const [dayA, monthA] = a.date.split(".").map(Number);
@@ -20,7 +21,7 @@ const command: SlashCommand = {
                     ? "\n" + "Empty!"
                     : "\n" + sortedDates.map((el) => `Date: ${el.date} | User: <@${el.userID}>`).join("\n")
             }`,
-            ephemeral: true,
+            flags: MessageFlags.Ephemeral,
         });
     },
 };

@@ -1,6 +1,6 @@
-import { SlashCommandBuilder, PermissionsBitField } from "discord.js";
+import { SlashCommandBuilder, PermissionsBitField, MessageFlags } from "discord.js";
 import { SlashCommand } from "../types";
-import { birthdayRemove } from "../utils/mongo";
+import { birthdayRemove } from "../mongo";
 
 const command: SlashCommand = {
     data: new SlashCommandBuilder()
@@ -15,15 +15,16 @@ const command: SlashCommand = {
         const hasPermission = interaction.memberPermissions?.has(PermissionsBitField.Flags.ModerateMembers);
 
         if (hasPermission || user.id === author.id) {
-            await birthdayRemove(user.id);
+            const guildID = interaction.guild.id;
+            await birthdayRemove(guildID, user.id);
             await interaction.reply({
                 content: `Birthday is removed! | User: <@${user.id}>`,
-                ephemeral: true,
+                flags: MessageFlags.Ephemeral,
             });
         } else {
             await interaction.reply({
                 content: `You can only remove your birthday!`,
-                ephemeral: true,
+                flags: MessageFlags.Ephemeral,
             });
         }
     },

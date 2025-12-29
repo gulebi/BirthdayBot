@@ -3,12 +3,12 @@ import customParseFormat from "dayjs/plugin/customParseFormat";
 dayjs.extend(customParseFormat);
 import { SlashCommandBuilder, PermissionsBitField, MessageFlags } from "discord.js";
 import { SlashCommand } from "../types";
-import { birthdayAdd } from "../mongo";
+import { birthdayUpdate } from "../mongo";
 
 const command: SlashCommand = {
     data: new SlashCommandBuilder()
-        .setName("add")
-        .setDescription("Add birthday")
+        .setName("update")
+        .setDescription("Update birthday")
         .addStringOption((option) => option.setName("date").setDescription("Birthday date").setRequired(true))
         .addUserOption((option) => option.setName("user").setDescription("Select user").setRequired(true)),
     execute: async (interaction) => {
@@ -30,9 +30,16 @@ const command: SlashCommand = {
 
         if (hasPermission || user.id === author.id) {
             const guildID = interaction.guild.id;
-            await birthdayAdd(guildID, user.id, date, author.id);
+            const updated = await birthdayUpdate(guildID, user.id, date, author.id);
+            if (!updated) {
+                return await interaction.reply({
+                    content: `Birthday not found for user <@${user.id}>!`,
+                    flags: MessageFlags.Ephemeral,
+                });
+            }
+
             await interaction.reply({
-                content: `Birthday is added! | Date: ${date} | User: <@${user.id}>`,
+                content: `Birthday is updated! | Date: ${date} | User: <@${user.id}>`,
                 flags: MessageFlags.Ephemeral,
             });
         } else {

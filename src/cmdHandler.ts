@@ -1,8 +1,7 @@
-import { Collection, Interaction, REST, Routes } from "discord.js";
+import { Collection, Interaction, MessageFlags, REST, Routes } from "discord.js";
 import { join } from "path";
 import { readdirSync } from "fs";
 import { SlashCommand } from "./types";
-import { sendError } from "./utils/replyUtils";
 import getEnvVar from "./utils/env";
 
 const rest = new REST().setToken(getEnvVar("TOKEN"));
@@ -35,18 +34,26 @@ async function cmdLoader() {
     }
 }
 
-function cmdTrigger(interaction: Interaction) {
+async function cmdTrigger(interaction: Interaction) {
     if (!interaction.isChatInputCommand()) return;
-
+    if (!interaction.inCachedGuild()) {
+        return await interaction.reply({
+            content: "This command can only be used in a server.",
+            flags: MessageFlags.Ephemeral,
+        });
+    }
     const command = slashCommands.get(interaction.commandName);
     if (!command) return;
 
     try {
-        command.execute(interaction);
+        await command.execute(interaction);
     } catch (error) {
         console.error(error);
-        sendError("commandExecError", interaction, true);
+        await interaction.reply({
+            content: "Error",
+            flags: MessageFlags.Ephemeral,
+        });
     }
 }
 
-export { slashCommands, cmdLoader, cmdTrigger };
+export { cmdLoader, cmdTrigger };
