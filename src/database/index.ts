@@ -16,7 +16,7 @@ import {
     birthdayList as sqliteBirthdayList,
     settingsGet as sqliteSettingsGet,
     settingsSet as sqliteSettingsSet,
-} from "./sqlite3";
+} from "./sqlite";
 
 type Driver = "mongo" | "sqlite";
 
