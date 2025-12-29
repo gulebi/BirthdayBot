@@ -1,6 +1,6 @@
 import { SlashCommandBuilder, PermissionsBitField, MessageFlags } from "discord.js";
 import { SlashCommand } from "../types";
-import { birthdayRemove } from "../database/mongo";
+import { birthdayRemove } from "../database";
 
 const command: SlashCommand = {
     data: new SlashCommandBuilder()

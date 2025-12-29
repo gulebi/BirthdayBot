@@ -5,7 +5,7 @@ dayjs.extend(advancedFormat);
 dayjs.extend(relativeTime);
 import cron from "node-cron";
 import { client } from "./index";
-import { birthdayList, settingsGet } from "./database/mongo";
+import { birthdayList, settingsGet } from "./database";
 import { Birthday } from "./types";
 import getEnvVar from "./utils/env";
 
@@ -38,7 +38,7 @@ async function sendCongratulation(birthday: Birthday, channelID: string) {
     }
 }
 
-export async function setupCongratulator() {
+export async function setup() {
     const announcementHour = getEnvVar("ANNOUNCEMENT_HOUR", "6");
     const announcementTimezone = getEnvVar("ANNOUNCEMENT_TIMEZONE", "Europe/London");
     cron.schedule(`0 ${announcementHour} * * *`, checkOnBirthday, {

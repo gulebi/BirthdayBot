@@ -3,7 +3,6 @@ import getEnvVar from "../../utils/env";
 
 const db = new Database(getEnvVar("SQLITE_DB_PATH", "./birthday-bot.db"));
 
-// Ensure tables exist before handlers run
 const createTables = () => {
     db.pragma("foreign_keys = ON");
     db.exec(`
@@ -30,8 +29,6 @@ const createTables = () => {
 		CREATE UNIQUE INDEX IF NOT EXISTS idx_birthdays_guild_user ON birthdays (guildID, userID);
 	`);
 };
-
-createTables();
 
 export function sqliteInit() {
     createTables();

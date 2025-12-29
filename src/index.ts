@@ -1,8 +1,8 @@
 import { Client, Events, GatewayIntentBits } from "discord.js";
 import { cmdLoader, cmdTrigger } from "./cmdHandler";
 import getEnvVar from "./utils/env";
-import { mongoConnect } from "./database/mongo";
-import { setupCongratulator } from "./congratulator";
+import { init as databaseInit } from "./database";
+import { setup as setupCongratulator } from "./congratulator";
 
 export const client = new Client({
     intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages],
@@ -10,7 +10,7 @@ export const client = new Client({
 
 client.once(Events.ClientReady, async (c) => {
     await cmdLoader();
-    await mongoConnect();
+    await databaseInit();
     await setupCongratulator();
 
     console.log(`${c.user.username} is up and running!`);
