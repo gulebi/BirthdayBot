@@ -1,6 +1,10 @@
 import db from "..";
 import { Birthday } from "../../../types";
 
+type BindParamsFromKeys<T, K extends readonly (keyof T)[]> = {
+    [I in keyof K]: T[K[I]];
+};
+
 type BirthdayRow = {
     guildID: string;
     userID: string;
@@ -50,9 +54,11 @@ export async function birthdayUpdate(
     date: string,
     updatedBy: string
 ): Promise<Birthday | null> {
-    const existing = db.prepare(`SELECT * FROM birthdays WHERE guildID = ? AND userID = ?`).get(guildID, userID) as
-        | BirthdayRow
-        | undefined;
+    const existing = db
+        .prepare<BindParamsFromKeys<BirthdayRow, ["guildID", "userID"]>, BirthdayRow | undefined>(
+            `SELECT * FROM birthdays WHERE guildID = ? AND userID = ?`
+        )
+        .get(guildID, userID);
 
     if (!existing) return null;
 
@@ -75,9 +81,11 @@ export async function birthdayUpdate(
 }
 
 export async function birthdayRemove(guildID: string, userID: string): Promise<Birthday | null> {
-    const existing = db.prepare(`SELECT * FROM birthdays WHERE guildID = ? AND userID = ?`).get(guildID, userID) as
-        | BirthdayRow
-        | undefined;
+    const existing = db
+        .prepare<BindParamsFromKeys<BirthdayRow, ["guildID", "userID"]>, BirthdayRow | undefined>(
+            `SELECT * FROM birthdays WHERE guildID = ? AND userID = ?`
+        )
+        .get(guildID, userID);
 
     if (!existing) return null;
 
@@ -86,6 +94,8 @@ export async function birthdayRemove(guildID: string, userID: string): Promise<B
 }
 
 export async function birthdayList(guildID: string): Promise<Birthday[]> {
-    const rows = db.prepare(`SELECT * FROM birthdays WHERE guildID = ?`).all(guildID) as BirthdayRow[];
+    const rows = db
+        .prepare<BindParamsFromKeys<BirthdayRow, ["guildID"]>, BirthdayRow>(`SELECT * FROM birthdays WHERE guildID = ?`)
+        .all(guildID);
     return rows.map(toBirthday);
 }

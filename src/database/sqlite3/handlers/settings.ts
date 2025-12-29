@@ -1,9 +1,9 @@
 import db from "..";
 import { Settings } from "../../../types";
 
-// type BindParamsFromKeys<T, K extends readonly (keyof T)[]> = {
-//     [I in keyof K]: T[K[I]];
-// };
+type BindParamsFromKeys<T, K extends readonly (keyof T)[]> = {
+    [I in keyof K]: T[K[I]];
+};
 
 type SettingsRow = {
     guildID: string;
@@ -23,24 +23,22 @@ const toSettings = (row: SettingsRow): Settings => ({
     version: row.version,
 });
 
-// export async function settingsGet(guildID: string): Promise<Settings | null> {
-//     const row = db
-//         .prepare<BindParamsFromKeys<SettingsRow, ["guildID"]>, SettingsRow | undefined>(
-//             `SELECT * FROM settings WHERE guildID = ?`
-//         )
-//         .get(guildID);
-//     if (!row) return null;
-//     return toSettings(row);
-// }
-
 export async function settingsGet(guildID: string): Promise<Settings | null> {
-    const row = db.prepare(`SELECT * FROM settings WHERE guildID = ?`).get(guildID) as SettingsRow | undefined;
+    const row = db
+        .prepare<BindParamsFromKeys<SettingsRow, ["guildID"]>, SettingsRow | undefined>(
+            `SELECT * FROM settings WHERE guildID = ?`
+        )
+        .get(guildID);
     if (!row) return null;
     return toSettings(row);
 }
 
 export async function settingsSet(guildID: string, channelID: string, lastUpdatedBy: string): Promise<Settings> {
-    const existing = db.prepare(`SELECT * FROM settings WHERE guildID = ?`).get(guildID) as SettingsRow | undefined;
+    const existing = db
+        .prepare<BindParamsFromKeys<SettingsRow, ["guildID"]>, SettingsRow | undefined>(
+            `SELECT * FROM settings WHERE guildID = ?`
+        )
+        .get(guildID);
     const now = new Date();
 
     if (existing) {
