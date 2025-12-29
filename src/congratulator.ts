@@ -7,7 +7,6 @@ import cron from "node-cron";
 import { client } from "./index";
 import { birthdayList, settingsGet } from "./mongo";
 import { Birthday } from "./types";
-import { get } from "http";
 import getEnvVar from "./utils/env";
 
 async function checkOnBirthday() {
@@ -26,27 +25,6 @@ async function checkOnBirthday() {
             }
         }
     }
-
-    // const dateObjects = list.map((obj) => {
-    //     let date = dayjs(`${obj.date}.${new Date().getFullYear()}`, "DD.MM.YYYY");
-
-    //     if (date.isBefore(currentDate)) date = date.add(1, "year");
-
-    //     return {
-    //         ...obj,
-    //         date,
-    //     };
-    // });
-
-    // const nearestNextDate = dateObjects.reduce((a, b) => {
-    //     return b.date.diff(currentDate) < a.date.diff(currentDate) ? b : a;
-    // });
-
-    // const user = await client.users.fetch(nearestNextDate.userID);
-
-    // client.user?.setActivity(`Next birthday is ${user.username} | ${nearestNextDate.date.format("DD.MM")}`, {
-    //     type: ActivityType.Custom,
-    // });
 }
 
 async function sendCongratulation(birthday: Birthday, channelID: string) {
